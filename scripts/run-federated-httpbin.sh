@@ -2,8 +2,11 @@
 #
 # This script is meant to be called by ./scripts/run-federated-istio.sh
 
-echo "### Deploying the sample bookinfo application..."
-kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
+echo "### Deploying the sample httpbin application..."
+kubectl create -f "${ISTIO_VERSION}"/samples/httpbin/bookinfo.yaml 2> /dev/null
+
+echo "### Deploying the sample httpbin application..."
+kubectl create -f "${ISTIO_VERSION}"/samples/sleep/bookinfo.yaml 2> /dev/null
 
 echo "### Waiting 30-seconds for bookinfo pods to start running..."
 sleep 30
@@ -22,8 +25,8 @@ sleep 3
 
 # Replace instances of external.daneyon.com if DNS_SUFFIX is set.
 if [ "${DNS_SUFFIX}" != "external.daneyon.com" ] ; then
-  for file in bookinfo-dns.yaml external-dns-crd-deployment.yaml federated-configmap.yaml; do
-    sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/$file
+  for files in bookinfo-dns.yaml external-dns-crd-deployment.yaml federated-configmap.yaml; do
+    sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/$files
   done
 fi
 

@@ -1,8 +1,9 @@
-## Federated Istio Traffic Management
-Federation-v2 provides consistency of Istio policies, security, traffic management, etc.. across multiple Istio meshes.
-Reference the official Istio [Traffic Management](https://archive.istio.io/v0.8/docs/tasks/traffic-management/)
-documentation for additional details. The following provides an example of federating Istio route rules across
-`cluster1` and `cluster2`. Before proceeding, refer to the [project README](../README.md) to setup Federated IStio.
+## Cross Cluster Service Management
+Cross cluster service management provides Istio policies, security, traffic management, etc.. capabilities between
+multiple Istio meshes. Reference the official Istio
+[Traffic Management](https://archive.istio.io/v0.8/docs/tasks/traffic-management/) documentation for additional details.
+The following provides an example of federating Istio route rules across`cluster1` and `cluster2`. Before proceeding,
+refer to the [project README](../README.md) to setup Federated IStio.
 
 Set the version of Federated Istio manifests to use:
 ```bash

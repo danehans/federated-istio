@@ -2,11 +2,20 @@
 #
 export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
 export BOOKINFO="${BOOKINFO:-true}"
+export HTTPBIN="${HTTPBIN:-false}"
 # export NODE_PORT=true for minikube and other k8s environments that expose services using type: NodePort
 export NODE_PORT="${NODE_PORT:-false}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
-CONTEXT="$(kubectl config current-context)"
-JOIN_CLUSTERS="${*}"
+export BOOKINFO_DNS="${BOOKINFO_DNS:-true}"
+export DNS_PREFIX="${DNS_PREFIX:-bookinfo}" # Not used when BOOKINFO_DNS=false
+export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Not used when BOOKINFO_DNS=false
+export CONTEXT="$(kubectl config current-context)"
+export JOIN_CLUSTERS="${*}"
+
+if [ "${BOOKINFO}" = "true" ] && [ "${HTTPBIN}" = "true" ] ; then
+  echo "### You can not set BOOKINFO and HTTPBIN to true."
+  exit 1
+fi
 
 # Check that kubectl is installed.
 if ! [ "$(which kubectl)" ] ; then
@@ -94,4 +103,9 @@ echo "### Federated Istio control-plane installation is complete."
 # Install bookinfo sample app
 if [ "${BOOKINFO}" = "true" ] ; then
   ./scripts/run-federated-bookinfo.sh
+fi
+
+# Install httpbin sample app
+if [ "${HTTPBIN}" = "true" ] ; then
+  ./scripts/run-federated-httpbin.sh
 fi
