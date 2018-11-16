@@ -21,10 +21,13 @@ caveats to consider:
 
 - The script assumes the current kubectl context contains the federation-v2 control-plane. `cluster2` is the
 context name of the second cluster to be added to the federation.
-- By default, the script installs the "bookinfo" Istio sample application. Set `export INSTALL_BOOKINFO=false`.
-- The "bookinfo" sample application deploys multi-cluster DNS using [Google Cloud DNS](https://cloud.google.com/dns/) as
-the global public DNS provider and `external.daneyon.com` as the managed zone.
-
+- By default, the script installs the bookinfo Istio sample application. Set `export BOOKINFO=false` to not include
+bookinfo as part of the installation.
+- By default, the bookinfo sample application deploys Federated DNS with
+[Google Cloud DNS](https://cloud.google.com/dns/) integration to expose the productpage frontend. This default behavior
+can be changed by setting `export BOOKINFO_DNS=false`.
+- When `export BOOKINFO_DNS=true` (default), you must have a DNS zone setup with a public registry, have Google Cloud
+DNS configured to use the zone, and set `export DNS_SUFFIX=your.registered.zone`
 
 ```bash
 ./scripts/run-federated-istio.sh cluster2
@@ -70,10 +73,14 @@ Create the namespace used for the Istio control-plane:
 kubectl create ns istio-system
 ```
 
-Use `kubectl` to install Federated Istio. __Note__: The `istio-ingressgateway` uses `type: LoadBalancer`. If you intend
-on deploying Federated Istio to clusters that use another type to expose services, you must change this field. An
-override manifest can be used to accomplish this once
+The `istio-ingressgateway` uses `type: LoadBalancer`. If you intend on deploying Federated Istio to clusters that use
+another type to expose services, you must change this field. An override manifest can be used to accomplish this once
 ([issue #367](https://github.com/kubernetes-sigs/federation-v2/issues/367)) is resolved.
+```bash
+sed -i 's/LoadBalancer/NodePort/' $ISTIO_VERSION/install/istio.yaml
+```
+
+Use `kubectl` to install Federated Istio.
 ```bash
 kubectl create -f istio/$ISTIO_VERSION/install/istio.yaml
 ```
@@ -200,8 +207,7 @@ determining the Ingress IP address and port for testing.
 
 ## What Next
 
-- Use the [Federated Traffic Management Guide](./docs/federated-traffic-management.md) to test Istio bookinfo federated
+- Use the [Federated Traffic Management Guide](docs/federated-traffic-management.md) to test Istio bookinfo federated
 traffic management capabilities.
 
-- Use the [Federated DNS Guide](./docs/federated-traffic-management.md) to test Federation-v2 multi-cluster DNS
-capabilities.
+- Use the [Multicluster Service DNS](docs/multicluster-dns.md) to test Federated DNS capabilities.

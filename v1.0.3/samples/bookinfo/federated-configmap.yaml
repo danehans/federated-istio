@@ -11,7 +11,7 @@ spec:
       labels:
         addonmanager.kubernetes.io/mode: EnsureExists
     data:
-      federations: external=external.daneyon.com
+      federations: external=foo.com
 ---
 apiVersion: core.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement

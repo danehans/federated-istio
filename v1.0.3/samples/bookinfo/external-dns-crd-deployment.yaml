@@ -20,7 +20,7 @@ spec:
         - --crd-source-kind=DNSEndpoint
         - --provider=google
         # will make ExternalDNS see only the hosted zones matching provided domain, omit to process all available zones.
-        - --domain-filter=external.daneyon.com
+        - --domain-filter=foo.com
         - --registry=txt
         - --txt-prefix=cname
         - --txt-owner-id=change_me

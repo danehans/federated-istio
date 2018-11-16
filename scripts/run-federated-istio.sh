@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
-export INSTALL_BOOKINFO="${INSTALL_BOOKINFO:-true}"
+export BOOKINFO="${BOOKINFO:-true}"
 # export NODE_PORT=true for minikube and other k8s environments that expose services using type: NodePort
 export NODE_PORT="${NODE_PORT:-false}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
@@ -47,9 +47,9 @@ kubectl create ns istio-system 2> /dev/null
 
 echo "### Installing Federated Istio..."
 if [ "${NODE_PORT}" = "true" ] ; then
-  sed -i 's/LoadBalancer/NodePort/' istio/"${ISTIO_VERSION}"/install/istio.yaml
+  sed -i 's/LoadBalancer/NodePort/' "${ISTIO_VERSION}"/install/istio.yaml
 fi
-kubectl create -f istio/"${ISTIO_VERSION}"/install/istio.yaml 2> /dev/null
+kubectl create -f "${ISTIO_VERSION}"/install/istio.yaml 2> /dev/null
 echo "### Waiting 60-seconds for Federated Istio resource creation to complete before proceeding with the installation..."
 sleep 60
 
@@ -67,7 +67,7 @@ kubefed2 federate enable logentry
 sleep 3
 
 echo "### Creating the Federated Istio custom resources..."
-kubectl create -f istio/"${ISTIO_VERSION}"/install/istio-types.yaml 2> /dev/null
+kubectl create -f "${ISTIO_VERSION}"/install/istio-types.yaml 2> /dev/null
 
 echo "### Waiting 30-seconds for the Istio control-plane pods to start running..."
 sleep 30
@@ -92,6 +92,6 @@ sleep 3
 echo "### Federated Istio control-plane installation is complete."
 
 # Install bookinfo sample app
-if [ "${INSTALL_BOOKINFO}" = "true" ] ; then
+if [ "${BOOKINFO}" = "true" ] ; then
   ./scripts/run-federated-bookinfo.sh
 fi
