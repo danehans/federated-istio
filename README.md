@@ -1,20 +1,44 @@
 # Federated Istio
 
-[Federation-v2](https://github.com/kubernetes-sigs/federation-v2) is an API and control-plane for actively managing
-multiple Kubernetes clusters and applications in those clusters. This makes Federation-v2 a viable solution for managing
-Istio deployments that span multiple Kubernetes clusters. Not only can Federation-v2 support lifecycle managemnt of the
-Istio control-plane, but it can also unify Istio capabilities such as
-[Traffic Management](https://istio.io/docs/tasks/traffic-management/), [Security](https://istio.io/docs/tasks/security/),
-[Policy Enforcement](https://istio.io/docs/tasks/policy-enforcement/), and
-[Telemetry](https://istio.io/docs/tasks/telemetry/).
+Federated Istio is a reference implementation of running [Istio](https://istio.io/) across multiple
+[Kubernetes](https://kubernetes.io/) clusters using [Federation-v2](https://github.com/kubernetes-sigs/federation-v2).
+Federation-v2 is an API and control-plane for actively managing multiple Kubernetes clusters and applications in those
+clusters. This makes Federation-v2 a viable solution for managing Istio deployments that span multiple Kubernetes
+clusters. Not only can Federation-v2 support lifecycle management of the Istio control-plane, but it can also unify
+Istio capabilities such as [Traffic Management](https://istio.io/docs/tasks/traffic-management/),
+[Security](https://istio.io/docs/tasks/security/), [Policy Enforcement](https://istio.io/docs/tasks/policy-enforcement/)
+, and [Telemetry](https://istio.io/docs/tasks/telemetry/).
 
 ## Federation-v2 Deployment
 Follow the federation-v2 [user guide](https://github.com/kubernetes-sigs/federation-v2/blob/master/docs/userguide.md)
 for deploying federation-v2 control-plane.
 
-## Federated Istio Deployment
+## Federated Istio Automated Deployment
 
-Federation-v2 includes `core` federated Kubernetes types such as `FederatedDeployment`, `FederatedConfigMap`, etc.. Use
+If you would like a simple, automated way of deploying Federated Istio to one or two clusters, then run the following
+script. Review the contents of the script to customize the deployment. Before running the script, there are a few
+caveats to consider:
+
+- The script assumes the current kubectl context contains the federation-v2 control-plane. `cluster2` is the
+context name of the second cluster to be added to the federation.
+- By default, the script installs the "bookinfo" Istio sample application. Set `export INSTALL_BOOKINFO=false`.
+- The "bookinfo" sample application deploys multi-cluster DNS using [Google Cloud DNS](https://cloud.google.com/dns/) as
+the global public DNS provider and `external.daneyon.com` as the managed zone.
+
+
+```bash
+./scripts/run-federated-istio.sh cluster2
+```
+
+You can use the clean-up script to remove what was done by `run-federated-istio.sh`.
+```bash
+./scripts/cleanup-federated-istio.sh cluster2
+```
+
+## Federated Istio Manual Deployment
+
+The manual deployment assumes 2 clusters with the context name of `cluster1` and `cluster2`. Federation-v2 includes
+`core` federated Kubernetes types such as `FederatedDeployment`, `FederatedConfigMap`, etc.. Use
 `kubectl get federatedtypeconfigs -n federation-system` to view the full list. Use the `kubefed2 federate` command to
 federate additional Kubernetes resource types required for Istio.
 ```bash
@@ -34,11 +58,6 @@ You must update the Federation-v2 service account `ClusterRole` for each target 
 for i in 1 2; do kubectl patch clusterrole/federation-controller-manager:cluster$i-cluster1 \
   -p='{"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]},{"nonResourceURLs":["/metrics"],"verbs":["get"]}]}' \
   --context cluster$i; done
-```
-
-Clone the [fedv2-manifests](https://github.com/danehans/fedv2-manifests) project and change to the project directory.
-```bash
-git clone https://github.com/danehans/fedv2-manifests.git && cd fedv2-manifests
 ```
 
 Set the version of Federated Istio manifests to use:
@@ -181,7 +200,8 @@ determining the Ingress IP address and port for testing.
 
 ## What Next
 
-- Use the [Federated Traffic Management Guide](./federated-traffic-management.md) to test Istio bookinfo federated traffic
-management capabilities.
+- Use the [Federated Traffic Management Guide](./docs/federated-traffic-management.md) to test Istio bookinfo federated
+traffic management capabilities.
 
-- Use the [Federated DNS Guide](./federated-traffic-management.md) to test Federation-v2 multi-cluster DNS capabilities.
+- Use the [Federated DNS Guide](./docs/federated-traffic-management.md) to test Federation-v2 multi-cluster DNS
+capabilities.

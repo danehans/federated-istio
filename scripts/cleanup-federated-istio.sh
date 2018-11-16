@@ -7,19 +7,19 @@ export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 CONTEXT="$(kubectl config current-context)"
 JOIN_CLUSTERS="${*}"
 
-# Check that kubectl is installed file.
+# Check that kubectl is installed.
 if ! [ "$(which kubectl)" ] ; then
     echo "### You must have the kubectl client installed and set in PATH before running this script."
     exit 1
 fi
 
-# Check that kubectl config file.
+# Check that kubectl config file is installed.
 if ! [ "$(stat ${KUBECONFIG})" ] ; then
     echo "### You must store your tenant cluster credentials to ${KUBECONFIG} before running this script."
     exit 1
 fi
 
-# Check that kubefed2 is installed file.
+# Check that kubefed2 is installed.
 if ! [ "$(which kubefed2)" ] ; then
     echo "### You must have the kubefed2 client installed and set in PATH before running this script."
     exit 1
@@ -36,7 +36,7 @@ if [ "${INSTALL_BOOKINFO}" = "true" ] ; then
     sleep 5
 
     echo "### Deleting the external dns controller..."
-    kubectl delete -f ./multicluster-dns/ext-dns/crd-gke-deploy.yaml 2> /dev/null
+    kubectl delete -f ./multicluster-dns/ext-dns/external-dns-crd-deployment.yaml 2> /dev/null
     sleep 5
 
     echo "### Deleting the federated bookinfo gateway..."
@@ -71,7 +71,7 @@ kubefed2 federate disable stdio --delete-from-api
 kubefed2 federate disable logentry --delete-from-api
 
 echo "### Deleting Federated Istio..."
-# Revert NodePort types back to LoadBalancer
+# Revert NodePort types back to default (LoadBalancer) if needed.
 NODEPORT_CHECK="$(grep -ri 'type: NodePort' istio/"${ISTIO_VERSION}"/install/istio.yaml) 2> /dev/null)"
 if [ "${NODEPORT_CHECK}" ] ; then
   sed -i 's/NodePort/LoadBalancer/' istio/"${ISTIO_VERSION}"/install/istio.yaml
@@ -80,7 +80,10 @@ kubectl delete -f istio/"${ISTIO_VERSION}"/install/istio.yaml 2> /dev/null
 sleep 30
 
 echo "### Updating the fed-v2 service accounts in target clusters due to issue #354..."
-for i in 1 2; do kubectl patch clusterrole/federation-controller-manager:cluster$i-cluster1 -p='{"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]}]}' --context cluster$i; done
+for c in ${JOIN_CLUSTERS}; do
+  kubectl patch clusterrole/federation-controller-manager:"${CONTEXT}"-"${CONTEXT}" \
+    -p='{"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]}]}' --context "${CONTEXT}"
+done
 
 echo "### Removing federated Kubernetes resource types required for Istio..."
 kubefed2 federate disable CustomResourceDefinition --delete-from-api

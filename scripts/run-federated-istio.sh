@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 #
-# Follow the federation-v2 user guide to create k8s clusters and fedv2 control-plane.
-# Then run this script from the project root directory.
-
 export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
 export INSTALL_BOOKINFO="${INSTALL_BOOKINFO:-true}"
 # export NODE_PORT=true for minikube and other k8s environments that expose services using type: NodePort
@@ -11,7 +8,7 @@ export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 CONTEXT="$(kubectl config current-context)"
 JOIN_CLUSTERS="${*}"
 
-# Check that kubectl is installed file.
+# Check that kubectl is installed.
 if ! [ "$(which kubectl)" ] ; then
     echo "### You must have the kubectl client installed and set in PATH before running this script."
     exit 1
@@ -23,7 +20,7 @@ if ! [ "$(stat ${KUBECONFIG})" ] ; then
     exit 1
 fi
 
-# Check that kubefed2 is installed file.
+# Check that kubefed2 is installed.
 if ! [ "$(which kubectl)" ] ; then
     echo "### You must have the kubefed2 client installed and set in PATH before running this script."
     exit 1
@@ -96,5 +93,5 @@ echo "### Federated Istio control-plane installation is complete."
 
 # Install bookinfo sample app
 if [ "${INSTALL_BOOKINFO}" = "true" ] ; then
-  ./istio/$ISTIO_VERSION/run-federated-bookinfo-demo.sh
+  ./scripts/run-federated-bookinfo.sh
 fi
