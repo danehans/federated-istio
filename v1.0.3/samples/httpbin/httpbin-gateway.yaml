@@ -1,0 +1,63 @@
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedGateway
+metadata:
+  name: httpbin-gateway
+spec:
+  template:
+    spec:
+      selector:
+        istio: ingressgateway # use Istio default gateway implementation
+      servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+        - "httpbin.external.daneyon.com"
+        - "istio-ingressgateway.istio-system.external.svc.external.daneyon.com"
+        - "istio-ingressgateway.istio-system.external.svc.us-west1.external.daneyon.com"
+        - "istio-ingressgateway.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"
+        - "istio-ingressgateway.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedGatewayPlacement
+metadata:
+  name: httpbin-gateway
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: httpbin
+spec:
+  template:
+    spec:
+      hosts:
+      - "*"
+      gateways:
+      - httpbin-gateway
+      http:
+      - match:
+        - uri:
+            exact: /html
+        - uri:
+            exact: /status
+        - uri:
+            exact: /delay
+        route:
+        - destination:
+            host: httpbin
+            port:
+              number: 8000
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: httpbin
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2

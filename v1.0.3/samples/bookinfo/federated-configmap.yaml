@@ -1,0 +1,25 @@
+apiVersion: core.federation.k8s.io/v1alpha1
+kind: FederatedConfigMap
+metadata:
+  name: kube-dns
+  namespace: kube-system
+spec:
+  template:
+    metadata:
+      name: kube-dns
+      namespace: kube-system
+      labels:
+        addonmanager.kubernetes.io/mode: EnsureExists
+    data:
+      federations: external=external.daneyon.com,prod=prod.daneyon.com,test=test.daneyon.com
+---
+apiVersion: core.federation.k8s.io/v1alpha1
+kind: FederatedConfigMapPlacement
+metadata:
+  name: kube-dns
+  namespace: kube-system
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2
+

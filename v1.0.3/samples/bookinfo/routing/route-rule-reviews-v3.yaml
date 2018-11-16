@@ -1,0 +1,23 @@
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedRouteRule
+metadata:
+  name: reviews-default
+spec:
+  template:
+    spec:
+      destination:
+        name: reviews
+      precedence: 1
+      route:
+      - labels:
+          version: v3
+        weight: 100
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedRouteRulePlacement
+metadata:
+  name: reviews-default
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1

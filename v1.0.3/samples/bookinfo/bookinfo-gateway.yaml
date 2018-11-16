@@ -1,0 +1,61 @@
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedGateway
+metadata:
+  name: bookinfo-gateway
+spec:
+  template:
+    spec:
+      selector:
+        istio: ingressgateway # use istio default controller
+      servers:
+      - port:
+          number: 80
+          name: http
+          protocol: HTTP
+        hosts:
+        - "*"
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedGatewayPlacement
+metadata:
+  name: bookinfo-gateway
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: bookinfo
+spec:
+  template:
+    spec:
+      hosts:
+      - "*"
+      gateways:
+      - bookinfo-gateway
+      http:
+      - match:
+        - uri:
+            exact: /productpage
+        - uri:
+            exact: /login
+        - uri:
+            exact: /logout
+        - uri:
+            prefix: /api/v1/products
+        route:
+        - destination:
+            host: productpage
+            port:
+              number: 9080
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: bookinfo
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2

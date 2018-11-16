@@ -1,0 +1,287 @@
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: edges.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: edge
+    istio: mixer-instance
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: metrics.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: metric
+    istio: mixer-instance
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: metric
+        plural: metrics
+        singular: metric
+        categories:
+        - istio-io
+        - policy-istio-io
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinition
+metadata:
+  name: envoyfilters.networking.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: istio-pilot
+spec:
+  template:
+    spec:
+      group: networking.istio.io
+      names:
+        kind: EnvoyFilter
+        plural: envoyfilters
+        singular: envoyfilter
+        categories:
+        - istio-io
+        - networking-istio-io
+      scope: Namespaced
+      version: v1alpha3
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: envoyfilters.networking.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: istio-pilot
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  annotations:
+    "helm.sh/hook": crd-install
+  name: meshpolicies.authentication.istio.io
+spec:
+  template:
+    spec:
+      group: authentication.istio.io
+      names:
+        kind: MeshPolicy
+        listKind: MeshPolicyList
+        plural: meshpolicies
+        singular: meshpolicy
+        categories:
+        - istio-io
+        - authentication-istio-io
+      scope: Cluster
+      version: v1alpha1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  annotations:
+    "helm.sh/hook": crd-install
+  name: meshpolicies.authentication.istio.io
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: bypasses.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: bypass
+    istio: mixer-adapter
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: bypass
+        plural: bypasses
+        singular: bypass
+        categories:
+        - istio-io
+        - policy-istio-io
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: bypasses.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: bypass
+    istio: mixer-adapter
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: redisquotas.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    package: redisquota
+    istio: mixer-adapter
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: redisquota
+        plural: redisquotas
+        singular: redisquota
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: redisquotas.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    package: redisquota
+    istio: mixer-adapter
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: signalfxs.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: signalfx
+    istio: mixer-adapter
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: signalfx
+        plural: signalfxs
+        singular: signalfx
+        categories:
+        - istio-io
+        - policy-istio-io
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: signalfxs.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: signalfx
+    istio: mixer-adapter
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: cloudwatches.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: cloudwatch
+    istio: mixer-adapter
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: cloudwatch
+        plural: cloudwatches
+        singular: cloudwatch
+        categories:
+        - istio-io
+        - policy-istio-io
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: cloudwatches.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: cloudwatch
+    istio: mixer-adapter
+spec:
+  clusterNames:
+  - cluster2
+---
+kind: FederatedCustomResourceDefinition
+apiVersion: generated.federation.k8s.io/v1alpha1
+metadata:
+  name: dogstatsds.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: dogstatsd
+    istio: mixer-adapter
+spec:
+  template:
+    spec:
+      group: config.istio.io
+      names:
+        kind: dogstatsd
+        plural: dogstatsds
+        singular: dogstatsd
+        categories:
+        - istio-io
+        - policy-istio-io
+      scope: Namespaced
+      version: v1alpha2
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedCustomResourceDefinitionPlacement
+metadata:
+  name: dogstatsds.config.istio.io
+  annotations:
+    "helm.sh/hook": crd-install
+  labels:
+    app: mixer
+    package: dogstatsd
+    istio: mixer-adapter
+spec:
+  clusterNames:
+  - cluster2

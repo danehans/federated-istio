@@ -1,0 +1,206 @@
+# Created from:
+# https://raw.githubusercontent.com/istio/istio/release-0.8/samples/bookinfo/routing/route-rule-all-v1.yaml
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: productpage
+spec:
+  template:
+    spec:
+      hosts:
+      - productpage
+      gateways:
+      - bookinfo
+      - mesh #TODO remove this if not needed
+      http:
+      - route:
+        - destination:
+            host: productpage
+            subset: v1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: productpage
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: reviews
+spec:
+  template:
+    spec:
+      hosts:
+      - reviews
+      http:
+      - route:
+        - destination:
+            host: reviews
+            subset: v1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: reviews
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: ratings
+spec:
+  template:
+    spec:
+      hosts:
+      - ratings
+      http:
+      - route:
+        - destination:
+            host: ratings
+            subset: v1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: ratings
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: details
+spec:
+  template:
+    spec:
+      hosts:
+      - details
+      http:
+      - route:
+        - destination:
+            host: details
+            subset: v1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: details
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRule
+metadata:
+  name: productpage
+spec:
+  template:
+    spec:
+      host: productpage
+      subsets:
+      - name: v1
+        labels:
+          version: v1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRulePlacement
+metadata:
+  name: productpage
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRule
+metadata:
+  name: reviews
+spec:
+  template:
+    spec:
+      host: reviews
+      subsets:
+      - name: v1
+        labels:
+          version: v1
+      - name: v2
+        labels:
+          version: v2
+      - name: v3
+        labels:
+          version: v3
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRulePlacement
+metadata:
+  name: reviews
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRule
+metadata:
+  name: ratings
+spec:
+  template:
+    spec:
+      host: ratings
+      subsets:
+      - name: v1
+        labels:
+          version: v1
+      - name: v2
+        labels:
+          version: v2
+      - name: v2-mysql
+        labels:
+          version: v2-mysql
+      - name: v2-mysql-vm
+        labels:
+          version: v2-mysql-vm
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRulePlacement
+metadata:
+  name: ratings
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRule
+metadata:
+  name: details
+spec:
+  template:
+    spec:
+      host: details
+      subsets:
+      - name: v1
+        labels:
+          version: v1
+      - name: v2
+        labels:
+          version: v2
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRulePlacement
+metadata:
+  name: details
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1

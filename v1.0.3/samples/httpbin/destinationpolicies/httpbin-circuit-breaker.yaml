@@ -1,0 +1,29 @@
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationPolicy
+metadata:
+  name: httpbin-circuit-breaker
+spec:
+  template:
+    spec:
+      destination:
+        name: httpbin
+        labels:
+          version: v1
+      circuitBreaker:
+        simpleCb:
+          maxConnections: 1
+          httpMaxPendingRequests: 1
+          sleepWindow: 3m
+          httpDetectionInterval: 1s
+          httpMaxEjectionPercent: 100
+          httpConsecutiveErrors: 1
+          httpMaxRequestsPerConnection: 1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationPolicyPlacement
+metadata:
+  name: httpbin-circuit-breaker
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1

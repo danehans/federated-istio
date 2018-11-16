@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: federation-system
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      #serviceAccountName: external-dns
+      containers:
+      - name: external-dns
+        image: registry.opensource.zalan.do/teapot/external-dns:v0.5.7
+        args:
+        - --source=crd
+        - --crd-source-apiversion=multiclusterdns.federation.k8s.io/v1alpha1
+        - --crd-source-kind=DNSEndpoint
+        - --provider=google
+        - --domain-filter=daneyon.com # will make ExternalDNS see only the hosted zones matching provided domain, omit to process all available hosted zones
+        - --registry=txt
+        - --txt-prefix=cname
+        # - --registry=noop https://github.com/kubernetes-incubator/external-dns/issues/740
+        - --txt-owner-id=danehans
+        # Issue: https://github.com/kubernetes-sigs/federation-v2/issues/330
+        #- --policy=upsert-only # Prevents ExternalDNS from deleting any records, omit to enable full synchronization

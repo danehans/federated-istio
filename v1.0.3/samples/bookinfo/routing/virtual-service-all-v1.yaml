@@ -1,0 +1,97 @@
+# Created from:
+# https://raw.githubusercontent.com/istio/istio/release-1.0/samples/bookinfo/networking/virtual-service-all-v1.yaml
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: productpage
+spec:
+  template:
+    spec:
+      hosts:
+      - productpage
+      http:
+      - route:
+        - destination:
+            host: productpage
+            subset: v1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: productpage
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: reviews
+spec:
+  template:
+    spec:
+      hosts:
+      - reviews
+      http:
+      - route:
+        - destination:
+            host: reviews
+            subset: v1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: reviews
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: ratings
+spec:
+  template:
+    spec:
+      hosts:
+      - ratings
+      http:
+      - route:
+        - destination:
+            host: ratings
+            subset: v1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: ratings
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: details
+spec:
+  template:
+    spec:
+      hosts:
+      - details
+      http:
+      - route:
+        - destination:
+            host: details
+            subset: v1
+---
+apiVersion: generated.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: details
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
