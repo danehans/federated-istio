@@ -13,7 +13,7 @@ Istio capabilities such as [Traffic Management](https://istio.io/docs/tasks/traf
 Follow the federation-v2 [user guide](https://github.com/kubernetes-sigs/federation-v2/blob/master/docs/userguide.md)
 for deploying federation-v2 control-plane.
 
-## Federated Istio Automated Deployment
+### Federated Istio Automated Deployment
 
 If you would like a simple, automated way of deploying Federated Istio to one or two clusters, then run the following
 script. Review the contents of the script to customize the deployment. Before running the script, there are a few
@@ -38,7 +38,7 @@ You can use the clean-up script to remove what was done by `run-federated-istio.
 ./scripts/cleanup-federated-istio.sh cluster2
 ```
 
-## Federated Istio Manual Deployment
+### Federated Istio Manual Deployment
 
 The manual deployment assumes 2 clusters with the context name of `cluster1` and `cluster2`. Federation-v2 includes
 `core` federated Kubernetes types such as `FederatedDeployment`, `FederatedConfigMap`, etc.. Use

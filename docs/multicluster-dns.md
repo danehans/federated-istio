@@ -37,7 +37,7 @@ $ kubectl create -f $ISTIO_VERSION/samples/bookinfo/bookinfo-dns.yaml
 
 Verify the resource records have been propagated to [Google Cloud DNS](https://cloud.google.com/dns/).
 ```bash
-$ gcloud dns record-sets list --zone "my.registered.domain"
+$ gcloud dns record-sets list --zone "my-registered-domain"
 NAME                                                                                               TYPE  TTL    DATA
 my.registered.domain.                                                                                       NS    21600  ns-cloud-c1.googledomains.com.,ns-cloud-c2.googledomains.com.,ns-cloud-c3.googledomains.com.,ns-cloud-c4.googledomains.com.
 my.registered.domain.                                                                                       SOA   21600  ns-cloud-c1.googledomains.com. cloud-dns-hostmaster.google.com. 1 21600 3600 259200 300

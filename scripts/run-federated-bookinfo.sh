@@ -27,7 +27,7 @@ if ! [ "$(which kubefed2)" ] ; then
 fi
 
 echo "### Deploying the sample bookinfo application..."
-kubectl create -f istio/"${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
+kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
 
 echo "### Waiting 30-seconds for bookinfo pods to start running..."
 sleep 30
@@ -41,7 +41,7 @@ kubefed2 federate enable VirtualService
 sleep 3
 
 echo "### Creating Federated bookinfo gateway..."
-kubectl create -f istio/"${ISTIO_VERSION}"/samples/bookinfo/bookinfo-gateway.yaml 2> /dev/null
+kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo-gateway.yaml 2> /dev/null
 sleep 3
 
 # Replace instances of external.daneyon.com if DNS_SUFFIX is set.
@@ -53,15 +53,15 @@ fi
 
 if [ "${BOOKINFO_DNS}" = "true" ] ; then
   echo "### Creating the external dns controller..."
-  kubectl create -f istio/"${ISTIO_VERSION}"/samples/bookinfo/external-dns-crd-deployment.yaml 2> /dev/null
+  kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/external-dns-crd-deployment.yaml 2> /dev/null
   sleep 5
 
   echo "### Creating the kube-dns configmap to support cross-cluster service discovery..."
-  kubectl create -f istio/"${ISTIO_VERSION}"/samples/bookinfo/federated-configmap.yaml 2> /dev/null
+  kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/federated-configmap.yaml 2> /dev/null
   sleep 5
 
   echo "### Creating Federated Domain and bookinfo ServiceDNSRecord resource..."
-  kubectl create -f istio/"${ISTIO_VERSION}"/samples/bookinfo/bookinfo-dns.yaml 2> /dev/null
+  kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo-dns.yaml 2> /dev/null
   sleep 3
 
   echo "### Testing bookinfo productpage:"

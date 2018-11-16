@@ -4025,7 +4025,7 @@ metadata:
 spec:
   template:
     spec:
-      type: NodePort
+      type: LoadBalancer
       selector:
         app: istio-ingressgateway
         istio: ingressgateway

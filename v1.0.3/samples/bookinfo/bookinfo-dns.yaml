@@ -3,7 +3,7 @@ kind: Domain
 metadata:
   name: external
   namespace: federation-system
-domain: foo.com
+domain: external.daneyon.com
 ---
 apiVersion: multiclusterdns.federation.k8s.io/v1alpha1
 kind: ServiceDNSRecord
