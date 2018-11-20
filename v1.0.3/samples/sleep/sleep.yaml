@@ -1,59 +1,74 @@
 apiVersion: core.federation.k8s.io/v1alpha1
-kind: FederatedService
+kind: FederatedServiceAccount
 metadata:
-  name: httpbin
-  labels:
-    app: httpbin
+  name: sleep
 spec:
   template:
-    spec:
-      ports:
-      - name: http
-        port: 8000
-      selector:
-        app: httpbin
+    automountServiceAccountToken: true
 ---
 apiVersion: core.federation.k8s.io/v1alpha1
-kind: FederatedServicePlacement
+kind: FederatedServiceAccountPlacement
 metadata:
-  name: httpbin
-  labels:
-    app: httpbin
+  name: sleep
 spec:
   clusterNames:
   - cluster2
   - cluster1
 ---
 apiVersion: core.federation.k8s.io/v1alpha1
+kind: FederatedService
+metadata:
+  name: sleep
+  labels:
+    app: sleep
+spec:
+  template:
+    spec:
+      ports:
+      - port: 80
+        name: http
+      selector:
+        app: sleep
+---
+apiVersion: core.federation.k8s.io/v1alpha1
+kind: FederatedServicePlacement
+metadata:
+  name: sleep
+  labels:
+    app: sleep
+spec:
+  clusterNames:
+  - cluster1
+  - cluster2
+---
+apiVersion: core.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
-  name: httpbin
+  name: sleep
 spec:
   template:
     spec:
       replicas: 1
       selector:
         matchLabels:
-          app: httpbin
-          version: v1
+          app: sleep
       template:
         metadata:
           labels:
-            app: httpbin
-            version: v1
+            app: sleep
         spec:
+          serviceAccountName: sleep
           containers:
-          - image: docker.io/citizenstig/httpbin
+          - name: sleep
+            image: pstauffer/curl
+            command: ["/bin/sleep", "3650d"]
             imagePullPolicy: IfNotPresent
-            name: httpbin
-            ports:
-            - containerPort: 8000
 ---
 apiVersion: core.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
-  name: httpbin
+  name: sleep
 spec:
   clusterNames:
-  - cluster2
   - cluster1
+  - cluster2

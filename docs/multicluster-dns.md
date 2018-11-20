@@ -16,9 +16,9 @@ export DNS_SUFFIX=my.registered.domain
 ```
 Change the zone name in the necessary deployment files.
 ```bash
-for files in bookinfo-dns.yaml external-dns-crd-deployment.yaml federated-configmap.yaml; do
-    sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/$files
-done
+$ sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/bookinfo-dns.yaml
+$ sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/external-dns/crd-deployment.yaml
+$ sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/external-dns/kubedns-configmap.yaml
 ```
 
 Deploy the [external-dns](https://github.com/kubernetes-incubator/external-dns) controller.

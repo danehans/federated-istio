@@ -3,17 +3,17 @@
 export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
 export BOOKINFO="${BOOKINFO:-true}"
 export HTTPBIN="${HTTPBIN:-false}"
+export DNS="${DNS:-true}"
+export DNS_PREFIX="${DNS_PREFIX:-bookinfo}" # Not used when DNS=false
+export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Not used when DNS=false
 # export NODE_PORT=true for minikube and other k8s environments that expose services using type: NodePort
 export NODE_PORT="${NODE_PORT:-false}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
-export BOOKINFO_DNS="${BOOKINFO_DNS:-true}"
-export DNS_PREFIX="${DNS_PREFIX:-bookinfo}" # Not used when BOOKINFO_DNS=false
-export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Not used when BOOKINFO_DNS=false
 export CONTEXT="$(kubectl config current-context)"
 export JOIN_CLUSTERS="${*}"
 
 if [ "${BOOKINFO}" = "true" ] && [ "${HTTPBIN}" = "true" ] ; then
-  echo "### You can not set BOOKINFO and HTTPBIN to true."
+  echo "### You cannot have BOOKINFO and HTTPBIN envs set to true."
   exit 1
 fi
 
@@ -58,6 +58,7 @@ echo "### Installing Federated Istio..."
 if [ "${NODE_PORT}" = "true" ] ; then
   sed -i 's/LoadBalancer/NodePort/' "${ISTIO_VERSION}"/install/istio.yaml
 fi
+
 kubectl create -f "${ISTIO_VERSION}"/install/istio.yaml 2> /dev/null
 echo "### Waiting 60-seconds for Federated Istio resource creation to complete before proceeding with the installation..."
 sleep 60
@@ -80,15 +81,6 @@ kubectl create -f "${ISTIO_VERSION}"/install/istio-types.yaml 2> /dev/null
 
 echo "### Waiting 30-seconds for the Istio control-plane pods to start running..."
 sleep 30
-
-for c in ${JOIN_CLUSTERS}; do
-    kubectl get pods -n istio-system --context "${CONTEXT}"
-done
-sleep 5
-
-for c in ${JOIN_CLUSTERS}; do
-    kubectl get mutatingwebhookconfigurations --context "${CONTEXT}"
-done
 
 echo "### Labeling the default namespace used for sidecar injection..."
 kubectl label namespace default istio-injection=enabled 2> /dev/null

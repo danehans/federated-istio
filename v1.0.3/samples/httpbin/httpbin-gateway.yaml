@@ -13,11 +13,7 @@ spec:
           name: http
           protocol: HTTP
         hosts:
-        - "httpbin.external.daneyon.com"
-        - "istio-ingressgateway.istio-system.external.svc.external.daneyon.com"
-        - "istio-ingressgateway.istio-system.external.svc.us-west1.external.daneyon.com"
-        - "istio-ingressgateway.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"
-        - "istio-ingressgateway.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
+        - "*"
 ---
 apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedGatewayPlacement
@@ -36,7 +32,11 @@ spec:
   template:
     spec:
       hosts:
-      - "*"
+      - "httpbin.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
       gateways:
       - httpbin-gateway
       http:

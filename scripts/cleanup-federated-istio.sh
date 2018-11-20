@@ -2,12 +2,18 @@
 #
 export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
 export BOOKINFO="${BOOKINFO:-true}"
-export BOOKINFO_DNS="${BOOKINFO_DNS:-true}"
-export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Not used when BOOKINFO_DNS=false
+export HTTPBIN="${HTTPBIN:-false}"
+export DNS="${DNS:-true}" # Only used when
+export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Only used when DNS=true
 export NODE_PORT="${NODE_PORT:-false}"
 export KUBECONFIG="${KUBECONFIG:-$HOME/.kube/config}"
 CONTEXT="$(kubectl config current-context)"
 JOIN_CLUSTERS="${*}"
+
+if [ "${BOOKINFO}" = "true" ] && [ "${HTTPBIN}" = "true" ] ; then
+  echo "### You cannot have BOOKINFO and HTTPBIN envs set to true."
+  exit 1
+fi
 
 # Check that kubectl is installed.
 if ! [ "$(which kubectl)" ] ; then
@@ -29,39 +35,13 @@ fi
 
 # Uninstall bookinfo sample app
 if [ "${BOOKINFO}" = "true" ] ; then
-  if [ "${BOOKINFO_DNS}" = "true" ] ; then
-    echo "### Deleting the federated domain bookinfo ServiceDNSRecord..."
-    kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo-dns.yaml 2> /dev/null
-    # wait 30-seconds for the Domain/ServiceDNSRecords to be removed before removing the ext-dns contrller.
-    sleep 30
-
-    echo "### Deleteing the kube-dns configmap to support cross-cluster service discovery..."
-    kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/federated-configmap.yaml 2> /dev/null
-    sleep 5
-
-    echo "### Deleting the external dns controller..."
-    kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/external-dns-crd-deployment.yaml 2> /dev/null
-    sleep 5
-  fi
-
-  echo "### Deleting the federated bookinfo gateway..."
-  kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo-gateway.yaml 2> /dev/null
-  sleep 5
-
-  echo "### Deleting the federated Istio custom resource types used by the bookinfo gateway..."
-  kubefed2 federate disable VirtualService --delete-from-api
-
-  echo "### Deleting the sample bookinfo application..."
-  kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
-  sleep 5
+  ./scripts/cleanup-federated-bookinfo.sh
 fi
 
-# Revert instances of external.daneyon.com if DNS_SUFFIX is set to something else.
-for file in bookinfo-dns.yaml external-dns-crd-deployment.yaml federated-configmap.yaml; do
-  if ! [ "$(grep -ri "external.daneyon.com" "${ISTIO_VERSION}"/samples/bookinfo/$file)" ] ; then
-    sed -i "s/${DNS_SUFFIX}/external.daneyon.com/" "${ISTIO_VERSION}"/samples/bookinfo/$file
-  fi
-done
+# Uninstall bookinfo sample app
+if [ "${HTTPBIN}" = "true" ] ; then
+  ./scripts/cleanup-federated-httpbin.sh
+fi
 
 echo "### Removing default namespace label used for sidecar injection..."
 kubectl label namespace default istio-injection- 2> /dev/null

@@ -25,9 +25,13 @@ context name of the second cluster to be added to the federation.
 bookinfo as part of the installation.
 - By default, the bookinfo sample application deploys Federated DNS with
 [Google Cloud DNS](https://cloud.google.com/dns/) integration to expose the productpage frontend. This default behavior
-can be changed by setting `export BOOKINFO_DNS=false`.
-- When `export BOOKINFO_DNS=true` (default), you must have a DNS zone setup with a public registry, have Google Cloud
-DNS configured to use the zone, and set `export DNS_SUFFIX=your.registered.zone`
+can be changed by setting `export DNS=false`.
+- When `export DNS=true`, you must have a DNS zone setup with a public registry, have Google Cloud
+DNS configured to use the zone, and set `export DNS_SUFFIX=your.registered.zone`.
+
+The following command creates a 2
+cluster federation, where `cluster2` is the name of the second member cluster and your current context
+(presumably cluster1) is the host and first member cluster.
 
 ```bash
 ./scripts/run-federated-istio.sh cluster2
@@ -41,9 +45,13 @@ You can use the clean-up script to remove what was done by `run-federated-istio.
 ### Federated Istio Manual Deployment
 
 The manual deployment assumes 2 clusters with the context name of `cluster1` and `cluster2`. Federation-v2 includes
-`core` federated Kubernetes types such as `FederatedDeployment`, `FederatedConfigMap`, etc.. Use
-`kubectl get federatedtypeconfigs -n federation-system` to view the full list. Use the `kubefed2 federate` command to
-federate additional Kubernetes resource types required for Istio.
+`core` federated Kubernetes types such as `FederatedDeployment`, `FederatedConfigMap`, etc.. You can use the following
+command to view the full list of federated Kubernetes types:
+```bash
+kubectl get federatedtypeconfigs -n federation-system
+```
+
+Use the `kubefed2 federate` command to federate additional Kubernetes resource types required by Istio.
 ```bash
 kubefed2 federate enable CustomResourceDefinition
 kubefed2 federate enable ClusterRole
@@ -82,7 +90,7 @@ sed -i 's/LoadBalancer/NodePort/' $ISTIO_VERSION/install/istio.yaml
 
 Use `kubectl` to install Federated Istio.
 ```bash
-kubectl create -f istio/$ISTIO_VERSION/install/istio.yaml
+kubectl create -f $ISTIO_VERSION/install/istio.yaml
 ```
 
 Federate the Istio custom resource types:
@@ -103,7 +111,7 @@ the Istio CRD's. Wait a moment and try running the `kubefed2 federate` command a
 
 Create the Federated Istio custom resources:
 ```bash
-kubectl create -f istio/$ISTIO_VERSION/install/istio-types.yaml
+kubectl create -f $ISTIO_VERSION/install/istio-types.yaml
 ```
 
 ## Istio Deployment Verification
@@ -158,7 +166,7 @@ default                    Active    1h        enabled
 
 Install the [bookinfo](https://istio.io/docs/examples/bookinfo/) sample application.
 ```bash
-kubectl create -f istio/$ISTIO_VERSION/samples/bookinfo/bookinfo.yaml
+kubectl create -f $ISTIO_VERSION/samples/bookinfo/bookinfo.yaml
 ```
 
 Verify the bookinfo pods have been propagated to both clusters.
@@ -187,7 +195,7 @@ kubefed2 federate enable VirtualService
 
 Create the Istio ingress gateway for the bookinfo application:
 ```bash
-kubectl create -f istio/$ISTIO_VERSION/samples/bookinfo/bookinfo-gateway.yaml
+kubectl create -f $ISTIO_VERSION/samples/bookinfo/bookinfo-gateway.yaml
 ```
 
 You can verify the status of the Istio `Gateway` and `VirtualService resources with:

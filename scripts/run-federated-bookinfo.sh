@@ -8,10 +8,6 @@ kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
 echo "### Waiting 30-seconds for bookinfo pods to start running..."
 sleep 30
 
-for c in ${JOIN_CLUSTERS}; do
-  kubectl get pod --context "${CONTEXT}"
-done
-
 echo "### Federating the Istio custom resource types used by the bookinfo gateway..."
 kubefed2 federate enable VirtualService
 sleep 3
@@ -22,18 +18,18 @@ sleep 3
 
 # Replace instances of external.daneyon.com if DNS_SUFFIX is set.
 if [ "${DNS_SUFFIX}" != "external.daneyon.com" ] ; then
-  for file in bookinfo-dns.yaml external-dns-crd-deployment.yaml federated-configmap.yaml; do
-    sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/$file
-  done
+  sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/bookinfo/bookinfo-dns.yaml
+  sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/external-dns/crd-deployment.yaml
+  sed -i "s/external.daneyon.com/${DNS_SUFFIX}/" ./"${ISTIO_VERSION}"/samples/external-dns/kubedns-configmap.yaml
 fi
 
-if [ "${BOOKINFO_DNS}" = "true" ] ; then
+if [ "${DNS}" = "true" ] ; then
   echo "### Creating the external dns controller..."
-  kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/external-dns-crd-deployment.yaml 2> /dev/null
+  kubectl create -f "${ISTIO_VERSION}"/samples/external-dns/crd-deployment.yaml 2> /dev/null
   sleep 5
 
   echo "### Creating the kube-dns configmap to support cross-cluster service discovery..."
-  kubectl create -f "${ISTIO_VERSION}"/samples/bookinfo/federated-configmap.yaml 2> /dev/null
+  kubectl create -f "${ISTIO_VERSION}"/samples/external-dns/kubedns-configmap.yaml 2> /dev/null
   sleep 5
 
   echo "### Creating Federated Domain and bookinfo ServiceDNSRecord resource..."
@@ -63,4 +59,4 @@ if [ "${BOOKINFO_DNS}" = "true" ] ; then
 fi
 
 echo "### Bookinfo sample application deployment complete."
-echo "### Since BOOKINFO_DNS=false you must manually test the productpage frontend."
+echo "### Since DNS=false you must manually test the productpage frontend."

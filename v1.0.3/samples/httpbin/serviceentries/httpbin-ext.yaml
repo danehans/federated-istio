@@ -1,0 +1,30 @@
+# You must federate the api type first:
+# kubefed2 federate enable ServiceEntry
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedServiceEntry
+metadata:
+  name: httpbin-ext
+spec:
+  template:
+    spec:
+      hosts:
+      - "httpbin.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"
+      - "istio-ingressgateway.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
+      ports:
+      - number: 80
+        name: http
+        protocol: HTTP
+      resolution: DNS
+      location: MESH_EXTERNAL
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedServiceEntryPlacement
+metadata:
+  name: httpbin-ext
+spec:
+  clusterNames:
+  - cluster2
+  - cluster1
