@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 #
 # Currently supports 2 clusters being deployed in 1 gcloud region
-# This script is meant to be called by ./scripts/run-federated-istio.sh
+export ISTIO_VERSION="${ISTIO_VERSION:-v1.0.3}"
+export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Not used when DNS=false
 export REGION="${REGION:-us-west1}"
 export CLUSTER1_ZONE="${CLUSTER1_ZONE:-us-west1-a}"
 export CLUSTER2_ZONE="${CLUSTER2_ZONE:-us-west1-b}"
 
 echo "### Federating additional Kubernetes resource types required for httpbin..."
-kubefed2 federate enable VirtualService
-kubefed2 federate enable ServiceEntry
+kubefed2 federate enable Gateway 2> /dev/null
+kubefed2 federate enable VirtualService 2> /dev/null
+kubefed2 federate enable ServiceEntry 2> /dev/null
 sleep 5
 
 echo "### Deploying the sample sleep application (client)..."
@@ -48,7 +50,7 @@ if [ "${CLUSTER2_ZONE}" != "us-west1-b" ] ; then
 fi
 
 echo "### Federating the Istio custom resource types used by the httpbin gateway..."
-kubefed2 federate enable VirtualService
+kubefed2 federate enable VirtualService 2> /dev/null
 sleep 3
 
 echo "### Exposing httpbin through the Istio ingress gateway..."
@@ -63,7 +65,7 @@ echo "### Deploying the kube-dns configmap to support cross-cluster service disc
 kubectl create -f "${ISTIO_VERSION}"/samples/external-dns/kubedns-configmap.yaml 2> /dev/null
 
 echo "### Creating the Domain and ServiceDNSRecord resources..."
-kubectl create -f "${ISTIO_VERSION}"}/samples/httpbin/httpbin-dns.yaml 2> /dev/null
+kubectl create -f "${ISTIO_VERSION}"/samples/httpbin/httpbin-dns.yaml 2> /dev/null
 
 echo "### Creating a ServiceEntry to allow external access to the httpbin server..."
 kubectl create -f "${ISTIO_VERSION}"/samples/httpbin/serviceentries/httpbin-ext.yaml 2> /dev/null

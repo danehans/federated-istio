@@ -9,7 +9,7 @@ echo "### Waiting 30-seconds for bookinfo pods to start running..."
 sleep 30
 
 echo "### Federating the Istio custom resource types used by the bookinfo gateway..."
-kubefed2 federate enable VirtualService
+kubefed2 federate enable VirtualService 2> /dev/null
 sleep 3
 
 echo "### Creating Federated bookinfo gateway..."

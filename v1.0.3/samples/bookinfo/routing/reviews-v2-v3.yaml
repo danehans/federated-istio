@@ -1,0 +1,56 @@
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRule
+metadata:
+  name: reviews
+spec:
+  template:
+    spec:
+      host: reviews
+      subsets:
+        - name: v1
+          labels:
+            version: v1
+        - name: v2
+          labels:
+            version: v2
+        - name: v3
+          labels:
+            version: v3
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedDestinationRulePlacement
+metadata:
+  name: reviews
+spec:
+  clusterNames:
+    - cluster1
+    - cluster2
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualService
+metadata:
+  name: reviews
+spec:
+  template:
+    spec:
+      hosts:
+        - reviews
+      http:
+        - route:
+          - destination:
+              host: reviews
+              subset: v2
+            weight: 50
+          - destination:
+              host: reviews
+              subset: v3
+            weight: 50
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServicePlacement
+metadata:
+  name: reviews
+spec:
+  clusterNames:
+    - cluster1
+    - cluster2

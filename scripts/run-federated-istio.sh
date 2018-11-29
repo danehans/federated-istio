@@ -36,12 +36,12 @@ if ! [ "$(which kubectl)" ] ; then
 fi
 
 echo "### Federating additional Kubernetes resource types required for Istio..."
-kubefed2 federate enable CustomResourceDefinition
-kubefed2 federate enable ClusterRole
-kubefed2 federate enable ClusterRoleBinding
-kubefed2 federate enable RoleBinding
-kubefed2 federate enable HorizontalPodAutoscaler
-kubefed2 federate enable MutatingWebhookConfiguration --comparison-field=Generation
+kubefed2 federate enable CustomResourceDefinition 2> /dev/null
+kubefed2 federate enable ClusterRole 2> /dev/null
+kubefed2 federate enable ClusterRoleBinding 2> /dev/null
+kubefed2 federate enable RoleBinding 2> /dev/null
+kubefed2 federate enable HorizontalPodAutoscaler 2> /dev/null
+kubefed2 federate enable MutatingWebhookConfiguration --comparison-field=Generation 2> /dev/null
 sleep 5
 
 echo "### Updating the fed-v2 service accounts in target clusters due to issue #354..."
@@ -64,16 +64,16 @@ echo "### Waiting 60-seconds for Federated Istio resource creation to complete b
 sleep 60
 
 echo "### Federating the Istio custom resource types..."
-kubefed2 federate enable Gateway
-kubefed2 federate enable DestinationRule
-kubefed2 federate enable kubernetes
-kubefed2 federate enable rule
-kubefed2 federate enable kubernetesenv
-kubefed2 federate enable prometheus
-kubefed2 federate enable metric
-kubefed2 federate enable attributemanifest
-kubefed2 federate enable stdio
-kubefed2 federate enable logentry
+kubefed2 federate enable Gateway 2> /dev/null
+kubefed2 federate enable DestinationRule 2> /dev/null
+kubefed2 federate enable kubernetes 2> /dev/null
+kubefed2 federate enable rule 2> /dev/null
+kubefed2 federate enable kubernetesenv 2> /dev/null
+kubefed2 federate enable prometheus 2> /dev/null
+kubefed2 federate enable metric 2> /dev/null
+kubefed2 federate enable attributemanifest 2> /dev/null
+kubefed2 federate enable stdio 2> /dev/null
+kubefed2 federate enable logentry 2> /dev/null
 sleep 3
 
 echo "### Creating the Federated Istio custom resources..."
