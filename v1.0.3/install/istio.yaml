@@ -5514,9 +5514,10 @@ spec:
           - name: inject-config
             configMap:
               name: istio-sidecar-injector
-              items:
-              - key: config
-                path: config
+              # Removed due to https://github.com/kubernetes-sigs/federation-v2/issues/469
+              #items:
+              #- key: config
+              #  path: config
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
