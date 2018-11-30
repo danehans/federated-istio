@@ -4,7 +4,7 @@
 # Use src/mutataing-webhook-configuration.yaml after install.
 ---
 # Source: istio/charts/galley/templates/configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: istio-galley-configuration
@@ -130,7 +130,7 @@ spec:
                 - tracespans
             failurePolicy: Fail
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: istio-galley-configuration
@@ -147,7 +147,7 @@ spec:
   - cluster2
 ---
 # Source: istio/charts/mixer/templates/configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: istio-statsd-prom-bridge
@@ -163,7 +163,7 @@ spec:
     data:
       mapping.conf: |-
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: istio-statsd-prom-bridge
@@ -180,7 +180,7 @@ spec:
   - cluster2
 ---
 # Source: istio/charts/prometheus/templates/configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: prometheus
@@ -505,7 +505,7 @@ spec:
             action: replace
             target_label: pod_name
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: prometheus
@@ -521,7 +521,7 @@ spec:
   - cluster2
 ---
 # Source: istio/charts/security/templates/configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: istio-security-custom-resources
@@ -582,7 +582,7 @@ spec:
         sleep 5
         /kubectl apply -f ${pathToResourceYAML}
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: istio-security-custom-resources
@@ -599,7 +599,7 @@ spec:
   - cluster2      
 ---
 # Source: istio/templates/configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: istio
@@ -689,7 +689,7 @@ spec:
           # Address where istio Pilot service is running
           discoveryAddress: istio-pilot.istio-system:15007
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: istio
@@ -705,7 +705,7 @@ spec:
   - cluster2
 ---
 # Source: istio/templates/sidecar-injector-configmap.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMap
 metadata:
   name: istio-sidecar-injector
@@ -873,7 +873,7 @@ spec:
               secretName: [[ printf "istio.%s" .Spec.ServiceAccountName ]]
               [[ end -]]
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedConfigMapPlacement
 metadata:
   name: istio-sidecar-injector
@@ -890,7 +890,7 @@ spec:
   - cluster2
 ---
 # Source: istio/charts/galley/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-galley-service-account
@@ -904,7 +904,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-galley-service-account
@@ -920,7 +920,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/gateways/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-egressgateway-service-account
@@ -934,7 +934,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-egressgateway-service-account
@@ -949,7 +949,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-ingressgateway-service-account
@@ -963,7 +963,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-ingressgateway-service-account
@@ -979,7 +979,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/mixer/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-mixer-service-account
@@ -993,7 +993,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-mixer-service-account
@@ -1009,7 +1009,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/pilot/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-pilot-service-account
@@ -1023,7 +1023,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-pilot-service-account
@@ -1039,7 +1039,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/prometheus/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: prometheus
@@ -1048,7 +1048,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: prometheus
@@ -1067,7 +1067,7 @@ spec:
 #
 # It's also important that the ServiceAccount, ClusterRole and ClusterRoleBinding
 # will be ready before running the hooked Job therefore the hook weights.
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-cleanup-secrets-service-account
@@ -1085,7 +1085,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-cleanup-secrets-service-account
@@ -1184,7 +1184,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedJob
 metadata:
   name: istio-cleanup-secrets
@@ -1228,7 +1228,7 @@ spec:
               done
           restartPolicy: OnFailure
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedJobPlacement
 metadata:
   name: istio-cleanup-secrets
@@ -1248,7 +1248,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/security/templates/create-custom-resources-job.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-security-post-install-account
@@ -1262,7 +1262,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-security-post-install-account
@@ -1350,7 +1350,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedJob
 metadata:
   name: istio-security-post-install
@@ -1392,7 +1392,7 @@ spec:
                 name: istio-security-custom-resources
           restartPolicy: OnFailure
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedJobPlacement
 metadata:
   name: istio-security-post-install
@@ -1411,7 +1411,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/security/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-citadel-service-account
@@ -1425,7 +1425,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-citadel-service-account
@@ -1441,7 +1441,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/sidecarInjectorWebhook/templates/serviceaccount.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: istio-sidecar-injector-service-account
@@ -1455,7 +1455,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: istio-sidecar-injector-service-account
@@ -3935,7 +3935,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/galley/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-galley
@@ -3953,7 +3953,7 @@ spec:
       selector:
         istio: galley
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-galley
@@ -3966,7 +3966,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/gateways/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-egressgateway
@@ -3993,7 +3993,7 @@ spec:
           name: https
           port: 443
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-egressgateway
@@ -4010,7 +4010,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-ingressgateway
@@ -4064,7 +4064,7 @@ spec:
           port: 15031
           targetPort: 15031
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-ingressgateway
@@ -4082,7 +4082,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/mixer/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-policy
@@ -4105,7 +4105,7 @@ spec:
         istio: mixer
         istio-mixer-type: policy
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-policy
@@ -4119,7 +4119,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-telemetry
@@ -4144,7 +4144,7 @@ spec:
         istio: mixer
         istio-mixer-type: telemetry
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-telemetry
@@ -4159,7 +4159,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/pilot/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-pilot
@@ -4184,7 +4184,7 @@ spec:
       selector:
         istio: pilot
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-pilot
@@ -4200,7 +4200,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/prometheus/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: prometheus
@@ -4219,7 +4219,7 @@ spec:
         protocol: TCP
         port: 9090
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: prometheus
@@ -4234,7 +4234,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/security/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   # we use the normal name here (e.g. 'prometheus')
@@ -4256,7 +4256,7 @@ spec:
       selector:
         istio: citadel
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   # we use the normal name here (e.g. 'prometheus')
@@ -4271,7 +4271,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/sidecarInjectorWebhook/templates/service.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: istio-sidecar-injector
@@ -4286,7 +4286,7 @@ spec:
       selector:
         istio: sidecar-injector
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: istio-sidecar-injector
@@ -4299,7 +4299,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/galley/templates/deployment.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-galley
@@ -4418,7 +4418,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-galley
@@ -4435,7 +4435,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/gateways/templates/deployment.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-egressgateway
@@ -4580,7 +4580,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-egressgateway
@@ -4596,7 +4596,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-ingressgateway
@@ -4747,7 +4747,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-ingressgateway
@@ -4764,7 +4764,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/mixer/templates/deployment.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-policy
@@ -4907,7 +4907,7 @@ spec:
             - name: uds-socket
               mountPath: /sock
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-policy
@@ -4921,7 +4921,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-telemetry
@@ -5031,7 +5031,7 @@ spec:
             - name: uds-socket
               mountPath: /sock
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-telemetry
@@ -5046,7 +5046,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/pilot/templates/deployment.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-pilot
@@ -5206,7 +5206,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-pilot
@@ -5227,7 +5227,7 @@ spec:
 ---
 # Source: istio/charts/prometheus/templates/deployment.yaml
 # TODO: the original template has service account, roles, etc
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: prometheus
@@ -5323,7 +5323,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: prometheus
@@ -5340,7 +5340,7 @@ spec:
 ---
 # Source: istio/charts/security/templates/deployment.yaml
 # istio CA watching all namespaces
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-citadel
@@ -5416,7 +5416,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-citadel
@@ -5433,7 +5433,7 @@ spec:
   - cluster1
 ---
 # Source: istio/charts/sidecarInjectorWebhook/templates/deployment.yaml
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: istio-sidecar-injector
@@ -5551,7 +5551,7 @@ spec:
                     values:
                     - s390x
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: istio-sidecar-injector

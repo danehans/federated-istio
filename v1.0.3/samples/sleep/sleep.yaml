@@ -1,4 +1,4 @@
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccount
 metadata:
   name: sleep
@@ -6,7 +6,7 @@ spec:
   template:
     automountServiceAccountToken: true
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceAccountPlacement
 metadata:
   name: sleep
@@ -15,7 +15,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: sleep
@@ -30,7 +30,7 @@ spec:
       selector:
         app: sleep
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: sleep
@@ -41,7 +41,7 @@ spec:
   - cluster1
   - cluster2
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: sleep
@@ -64,7 +64,7 @@ spec:
             command: ["/bin/sleep", "3650d"]
             imagePullPolicy: IfNotPresent
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: sleep

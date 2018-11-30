@@ -11,7 +11,11 @@ Istio capabilities such as [Traffic Management](https://istio.io/docs/tasks/traf
 
 ## Federation-v2 Deployment
 Follow the federation-v2 [user guide](https://github.com/kubernetes-sigs/federation-v2/blob/master/docs/userguide.md)
-for deploying federation-v2 control-plane.
+for deploying federation-v2 control-plane. After completing the deployment, copy the `kubefed2` binary to a directory in
+your $PATH:
+```bash
+cp ./bin/kubefed2 /usr/local/bin/
+```
 
 ### Federated Istio Automated Deployment
 

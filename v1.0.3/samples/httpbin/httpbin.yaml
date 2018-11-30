@@ -1,4 +1,4 @@
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedService
 metadata:
   name: httpbin
@@ -13,7 +13,7 @@ spec:
       selector:
         app: httpbin
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServicePlacement
 metadata:
   name: httpbin
@@ -24,7 +24,7 @@ spec:
   - cluster2
   - cluster1
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeployment
 metadata:
   name: httpbin
@@ -49,7 +49,7 @@ spec:
             ports:
             - containerPort: 8000
 ---
-apiVersion: core.federation.k8s.io/v1alpha1
+apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedDeploymentPlacement
 metadata:
   name: httpbin
