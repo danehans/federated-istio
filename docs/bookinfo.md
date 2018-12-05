@@ -11,6 +11,11 @@ If you would like a simple, automated way of deploying the sample bookinfo appli
 deployment then run the following script. Review the contents of the script to customize the deployment. Before running
 the script, refer to the caveats in the [project README](../README.md).
 
+Set the version of Federated Istio manifests to use:
+```bash
+export ISTIO_VERSION=v1.0.3
+```
+
 ```bash
 ./scripts/run-federated-bookinfo.sh
 ```
