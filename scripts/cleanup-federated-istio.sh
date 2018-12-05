@@ -51,16 +51,16 @@ kubectl delete -f "${ISTIO_VERSION}"/install/istio-types.yaml 2> /dev/null
 sleep 5
 
 echo "### Deleting federated Istio custom resource types..."
-kubefed2 federate disable Gateway --delete-from-api
-kubefed2 federate disable DestinationRule --delete-from-api
-kubefed2 federate disable kubernetes --delete-from-api
-kubefed2 federate disable rule --delete-from-api
-kubefed2 federate disable kubernetesenv --delete-from-api
-kubefed2 federate disable prometheus --delete-from-api
-kubefed2 federate disable metric --delete-from-api
-kubefed2 federate disable attributemanifest --delete-from-api
-kubefed2 federate disable stdio --delete-from-api
-kubefed2 federate disable logentry --delete-from-api
+kubefed2 federate disable gateways.networking.istio.io  --delete-from-api
+kubefed2 federate disable destinationrules.networking.istio.io --delete-from-api
+kubefed2 federate disable kuberneteses.config.istio.io --delete-from-api
+kubefed2 federate disable rules.config.istio.io --delete-from-api
+kubefed2 federate disable kubernetesenvs.config.istio.io --delete-from-api
+kubefed2 federate disable prometheuses.config.istio.io --delete-from-api
+kubefed2 federate disable metrics.config.istio.io --delete-from-api
+kubefed2 federate disable attributemanifests.config.istio.io --delete-from-api
+kubefed2 federate disable stdios.config.istio.io --delete-from-api
+kubefed2 federate disable logentries.config.istio.io --delete-from-api
 
 echo "### Deleting Federated Istio..."
 # Revert NodePort types back to default (LoadBalancer) if needed.
@@ -78,12 +78,12 @@ for c in ${JOIN_CLUSTERS}; do
 done
 
 echo "### Removing federated Kubernetes resource types required for Istio..."
-kubefed2 federate disable CustomResourceDefinition --delete-from-api
-kubefed2 federate disable ClusterRole --delete-from-api
-kubefed2 federate disable ClusterRoleBinding --delete-from-api
-kubefed2 federate disable RoleBinding --delete-from-api
-kubefed2 federate disable HorizontalPodAutoscaler --delete-from-api
-kubefed2 federate disable MutatingWebhookConfiguration --delete-from-api
+kubefed2 federate disable customresourcedefinitions.apiextensions.k8s.io --delete-from-api
+kubefed2 federate disable clusterroles.rbac.authorization.k8s.io --delete-from-api
+kubefed2 federate disable clusterrolebindings.rbac.authorization.k8s.io --delete-from-api
+kubefed2 federate disable rolebindings.rbac.authorization.k8s.io --delete-from-api
+kubefed2 federate disable federatedhorizontalpodautoscalers.autoscaling --delete-from-api
+kubefed2 federate disable mutatingwebhookconfigurations.admissionregistration.k8s.io --delete-from-api
 
 echo "### Federated Kubernetes resource types required for Istio have been removed."
 sleep 5

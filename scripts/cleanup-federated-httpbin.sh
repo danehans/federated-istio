@@ -34,9 +34,9 @@ kubectl delete -f "${ISTIO_VERSION}"/samples/sleep/sleep.yaml 2> /dev/null
 sleep 5
 
 echo "### Removing additional federated Kubernetes resource types required for httpbin..."
-kubefed2 federate disable Gateway --delete-from-api 2> /dev/null
-kubefed2 federate disable VirtualService --delete-from-api 2> /dev/null
-kubefed2 federate disable ServiceEntry --delete-from-api 2> /dev/null
+kubefed2 federate disable gateways.networking.istio.io --delete-from-api 2> /dev/null
+kubefed2 federate disable virtualservices.networking.istio.io --delete-from-api 2> /dev/null
+kubefed2 federate disable erviceentries.networking.istio.io --delete-from-api 2> /dev/null
 sleep 5
 
 # Replace instances of external.daneyon.com if DNS_SUFFIX is set.

@@ -24,8 +24,8 @@ kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo-gateway.yaml 2> /
 sleep 5
 
 echo "### Deleting the federated Istio custom resource types used by the bookinfo gateway..."
-kubefed2 federate disable Gateway --delete-from-api 2> /dev/null
-kubefed2 federate disable VirtualService --delete-from-api 2> /dev/null
+kubefed2 federate disable gateways.networking.istio.io --delete-from-api 2> /dev/null
+kubefed2 federate disable virtualservices.networking.istio.io --delete-from-api 2> /dev/null
 
 echo "### Deleting the sample bookinfo application..."
 kubectl delete -f "${ISTIO_VERSION}"/samples/bookinfo/bookinfo.yaml 2> /dev/null
