@@ -1,5 +1,5 @@
 # You must federate the api type first:
-# kubefed2 federate enable ServiceEntry
+# kubefed2 federate enable ServiceEntry --override-paths=spec.hosts
 apiVersion: primitives.federation.k8s.io/v1alpha1
 kind: FederatedServiceEntry
 metadata:
@@ -9,10 +9,6 @@ spec:
     spec:
       hosts:
       - "httpbin.external.daneyon.com"
-      - "istio-ingressgateway.istio-system.external.svc.external.daneyon.com"
-      - "istio-ingressgateway.istio-system.external.svc.us-west1.external.daneyon.com"
-      - "istio-ingressgateway.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"
-      - "istio-ingressgateway.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
       ports:
       - number: 80
         name: http
@@ -28,3 +24,16 @@ spec:
   clusterNames:
   - cluster2
   - cluster1
+---
+apiVersion: primitives.federation.k8s.io/v1alpha1
+kind: FederatedVirtualServiceEntryOverride
+metadata:
+  name: httpbin-ext
+spec:
+  overrides:
+    - clusterName: cluster1
+      hosts:
+        - "httpbin.istio-system.external.svc.us-west1-b.us-west1.external.daneyon.com"
+    - clusterName: cluster2
+      hosts:
+        - "httpbin.istio-system.external.svc.us-west1-a.us-west1.external.daneyon.com"

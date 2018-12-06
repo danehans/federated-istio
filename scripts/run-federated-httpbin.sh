@@ -87,9 +87,9 @@ do
   if [ "$resp1" = "200" ] ; then
     echo "#### httpbin gateway test succeeded with \"HTTP/1.1 $resp1 OK\" return code."
     echo " Verifying Istio cross-mesh service policies from cluster1 to cluster2..."
-    kubectl --context cluster1 exec -it $SLEEP_POD1 -c sleep curl http://istio-ingressgateway.istio-system.external.svc."${CLUSTER2_ZONE}"."${REGION}"."${DNS_SUFFIX}"/html
+    kubectl --context cluster1 exec -it $SLEEP_POD1 -c sleep curl http://httpbin.istio-system.external.svc."${CLUSTER2_ZONE}"."${REGION}"."${DNS_SUFFIX}"/html
     echo "### Verifying Istio cross-mesh service policies from cluster2 to cluster1..."
-    kubectl --context cluster2 exec -it $SLEEP_POD2 -c sleep curl http://istio-ingressgateway.istio-system.external.svc."${CLUSTER1_ZONE}"."${REGION}"."${DNS_SUFFIX}"/html
+    kubectl --context cluster2 exec -it $SLEEP_POD2 -c sleep curl http://httpbin.istio-system.external.svc."${CLUSTER1_ZONE}"."${REGION}"."${DNS_SUFFIX}"/html
     echo "Istio Cross-cluster service policy verification completed successfully!"
     exit 0
   fi
