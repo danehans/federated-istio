@@ -13,4 +13,5 @@ metadata:
 spec:
   domainRef: external
   dnsPrefix: bookinfo
+  externalName: bookinfo
   recordTTL: 300

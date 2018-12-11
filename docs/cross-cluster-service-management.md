@@ -15,8 +15,8 @@ export ISTIO_VERSION=v1.0.3
 Federate the Istio custom api types used by this guide.
 ```bash
 kubefed2 federate enable Gateway
-kubefed2 federate enable VirtualService
-kubefed2 federate enable ServiceEntry
+kubefed2 federate enable VirtualService --override-paths=spec.hosts
+kubefed2 federate enable ServiceEntry --override-paths=spec.hosts
 ```
 
 Start the [sleep](https://github.com/istio/istio/tree/master/samples/sleep) sample application used as a test source for

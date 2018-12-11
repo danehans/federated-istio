@@ -13,4 +13,5 @@ metadata:
 spec:
   domainRef: external
   dnsPrefix: httpbin
+  externalName: httpbin
   recordTTL: 300
