@@ -1,6 +1,6 @@
 # Federated Istio
 
-Federated Istio is a reference implementation of running [Istio](https://istio.io/) across multiple
+Federated Istio is a reference implementation of deploying and managing [Istio](https://istio.io/) across multiple
 [Kubernetes](https://kubernetes.io/) clusters using [Federation-v2](https://github.com/kubernetes-sigs/federation-v2).
 Federation-v2 is an API and control-plane for actively managing multiple Kubernetes clusters and applications in those
 clusters. This makes Federation-v2 a viable solution for managing Istio deployments that span multiple Kubernetes
@@ -11,8 +11,9 @@ Istio capabilities such as [Traffic Management](https://istio.io/docs/tasks/traf
 
 ## Federation-v2 Deployment
 Follow the federation-v2 [user guide](https://github.com/kubernetes-sigs/federation-v2/blob/master/docs/userguide.md)
-for deploying federation-v2 control-plane. After completing the deployment, copy the `kubefed2` binary to a directory in
-your $PATH:
+for deploying the federation-v2 control-plane. You must deploy federation-v2 using the
+[canary image](https://github.com/kubernetes-sigs/federation-v2/blob/master/docs/development.md#test-latest-master-changes-canary).
+After completing the deployment, copy the `kubefed2` binary to a directory in your $PATH:
 ```bash
 cp ./bin/kubefed2 /usr/local/bin/
 ```
@@ -23,8 +24,8 @@ If you would like a simple, automated way of deploying Federated Istio to one or
 script. Review the contents of the script to customize the deployment. Before running the script, there are a few
 caveats to consider:
 
-- The script assumes the current kubectl context contains the federation-v2 control-plane. `cluster2` is the
-context name of the second cluster to be added to the federation.
+- The script assumes the current kubectl context contains the federation-v2 control-plane and is named `cluster1`.
+`cluster2` is the context name of the second cluster to be added to the federation.
 - By default, the script installs the bookinfo Istio sample application. Set `export BOOKINFO=false` to not include
 bookinfo as part of the installation.
 - By default, the bookinfo sample application deploys Federated DNS with
@@ -33,16 +34,15 @@ can be changed by setting `export DNS=false`.
 - When `export DNS=true`, you must have a DNS zone setup with a public registry, have Google Cloud
 DNS configured to use the zone, and set `export DNS_SUFFIX=your.registered.zone`.
 
-The following command creates a 2 cluster federation, where `cluster2` is the name of the second member cluster and your
-current context (presumably cluster1) is the host and first member cluster.
+The following command deploying Federated Istio to both clusters.
 
 ```bash
-./scripts/run-federated-istio.sh cluster2
+./scripts/run-federated-istio.sh
 ```
 
 You can use the clean-up script to remove what was done by `run-federated-istio.sh`.
 ```bash
-./scripts/cleanup-federated-istio.sh cluster2
+./scripts/cleanup-federated-istio.sh
 ```
 
 ### Federated Istio Manual Deployment
@@ -64,15 +64,7 @@ kubefed2 federate enable HorizontalPodAutoscaler
 kubefed2 federate enable MutatingWebhookConfiguration --comparison-field=Generation
 ```
 __Note:__ The sidecar-injector pod patches the client `caBundle` of the `MutatingWebhookConfiguration` resource,
-so `comparisonField: Generation` must be used for federating `MutatingWebhookConfiguration`.
-
-You must update the Federation-v2 service account `ClusterRole` for each target cluster due to
-[issue #354](https://github.com/kubernetes-sigs/federation-v2/issues/354):
-```bash
-for i in 1 2; do kubectl patch clusterrole/federation-controller-manager:cluster$i-cluster1 \
-  -p='{"rules":[{"apiGroups":["*"],"resources":["*"],"verbs":["*"]},{"nonResourceURLs":["/metrics"],"verbs":["get"]}]}' \
-  --context cluster$i; done
-```
+so `comparisonField: Generation` must be used.
 
 Set the version of Federated Istio manifests to use:
 ```bash
@@ -94,6 +86,13 @@ sed -i 's/LoadBalancer/NodePort/' $ISTIO_VERSION/install/istio.yaml
 Use `kubectl` to install Federated Istio.
 ```bash
 kubectl create -f $ISTIO_VERSION/install/istio.yaml
+```
+
+Due to [Issue #469](https://github.com/kubernetes-sigs/federation-v2/issues/469), create `MutatingWebhookConfiguration`
+without Federation-v2:
+```bash
+$ kubectl create -f $ISTIO_VERSION/install/mutatingwebhookconfiguration.yaml --context cluster1
+$ kubectl create -f $ISTIO_VERSION/install/mutatingwebhookconfiguration.yaml --context cluster2
 ```
 
 Federate the Istio custom resource types:
@@ -149,14 +148,13 @@ istio-telemetry-785947f8c8-s8sqq          2/2       Running     0          1m
 prometheus-9c994b8db-965q9                1/1       Running     0          1m
 ```
 
-The Federated Istio meshes are now ready to run applications. You can now proceed to the Bookinfo Deployment
-section or view other installation details by replacing `pods` with the correct Kubernetes resource name
-(i.e. `configmaps`) or the federated equivalent (i.e. federatedconfigmaps).
+The Istio service meshes are now ready to run micro services. You can now proceed to the Bookinfo Deployment
+section or view other installation details by replacing `pods` in the above command with the correct Kubernetes resource
+name (i.e. `configmaps`) or the federated equivalent (i.e. federatedconfigmaps).
 
 ## What Next
 
 - Deploy the sample federated [bookinfo](docs/bookinfo.md) application.
-- Use the [Federated Traffic Management Guide](docs/federated-traffic-management.md) to test Istio bookinfo federated
+- Use the [Federated Traffic Management Guide](docs/federated-traffic-management.md) to test Istio Bookinfo federated
 traffic management capabilities.
-
 - Use the [Multicluster Service DNS](docs/multicluster-dns.md) to test Federated DNS capabilities.

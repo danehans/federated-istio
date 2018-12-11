@@ -7,6 +7,12 @@ export CLUSTER1_ZONE="${CLUSTER1_ZONE:-us-west1-a}"
 export CLUSTER2_ZONE="${CLUSTER2_ZONE:-us-west1-b}"
 export DNS_SUFFIX="${DNS_SUFFIX:-external.daneyon.com}" # Only used when DNS=true
 
+echo "### Removing additional federated Kubernetes resource types required for httpbin..."
+kubefed2 federate disable Gateway --delete-from-api 2> /dev/null
+kubefed2 federate disable VirtualService --delete-from-api 2> /dev/null
+kubefed2 federate disable ServiceEntry --delete-from-api 2> /dev/null
+sleep 5
+
 echo "### Deleting a ServiceEntry to allow external access to the httpbin server..."
 kubectl delete -f "${ISTIO_VERSION}"/samples/httpbin/serviceentries/httpbin-ext.yaml 2> /dev/null
 
@@ -31,12 +37,6 @@ kubectl delete -f "${ISTIO_VERSION}"/samples/httpbin/httpbin.yaml 2> /dev/null
 
 echo "### Deleting the sample sleep application (client)..."
 kubectl delete -f "${ISTIO_VERSION}"/samples/sleep/sleep.yaml 2> /dev/null
-sleep 5
-
-echo "### Removing additional federated Kubernetes resource types required for httpbin..."
-kubefed2 federate disable gateways.networking.istio.io --delete-from-api 2> /dev/null
-kubefed2 federate disable virtualservices.networking.istio.io --delete-from-api 2> /dev/null
-kubefed2 federate disable erviceentries.networking.istio.io --delete-from-api 2> /dev/null
 sleep 5
 
 # Replace instances of external.daneyon.com if DNS_SUFFIX is set.
